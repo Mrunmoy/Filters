@@ -13,7 +13,7 @@ Mathematically:
 
 $$
 \alpha_k = \frac{k-1}{k}, \qquad
-\text{avg}_k = \alpha_k \cdot \text{avg}_{k-1} + (1-\alpha_k) \cdot x_k
+A_k = \alpha_k \cdot A_{k-1} + (1-\alpha_k) \cdot x_k
 $$
 
 - Initial state:  
@@ -26,8 +26,9 @@ $$
 
 For a signal sequence \( x_k \), with window size \( N \):
 
+
 $$
-\text{avg}_k = \frac{1}{N}\sum_{i=k-N+1}^{k} x_i
+A_k = \frac{1}{N}\sum_{i=k-N+1}^{k} x_i
 $$
 
 - The first call fills the entire buffer with the first sample (MATLAB behavior).  
