@@ -1,9 +1,11 @@
-# filters
+# Filters
 
-A collection of small, focused **filters** implemented in modern C++ with per-filter unit tests.
-Each filter lives in its own directory with `inc/`, `src/`, and `test/` folders.
+A collection of small, focused **filters** implemented in modern C++ with unit tests and optional data visualization. The original code was in Matlab (refer to Reference section below) from Dr. Shane Ross. I just converted them to C++ version for my own understanding and playing with them.
 
-- Build system: CMake, with GoogleTest fetched automatically for tests.
+- **Build system:** CMake (GoogleTest is fetched automatically)
+- **Language standard:** C++17 (or newer)
+
+---
 
 ## Layout
 
@@ -11,22 +13,42 @@ Each filter lives in its own directory with `inc/`, `src/`, and `test/` folders.
 filters/
   CMakeLists.txt
   avg/
-    CMakeLists.txt
-    inc/RunningAverageFilter.hpp
-    src/RunningAverageFilter.cpp
-    test/Tests.cpp
+    README.md
+    inc/
+    src/
+    test/
+  median/
+    README.md
+    inc/
+    src/
+    test/
+  ...
 ```
+
+---
 
 ## Build & Test
 
 ```bash
-cmake -S . -B build -DBUILD_TESTING=ON
-cmake --build build -j
-ctest --test-dir build --output-on-failure
+./build.sh
 ```
 
-## Adding a New Filter
+---
 
-- Create a new directory, e.g. `median/`, with the same `include/`, `src/`, `test/` subfolders.
-- Add `add_subdirectory(median)` in the top-level `CMakeLists.txt`.
-- Export headers under a consistent namespace, e.g. `Filters::Median`.
+## Filters
+
+- [Average Filters (Running Mean & Moving Average)](avg/README.md)
+
+*(More filters will be listed here as they are added.)*
+
+---
+
+## Reference
+https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO_Wrcbk
+
+https://www.youtube.com/watch?v=HCd-leV8OkU&list=PLUeHTafWecAXDFDYEwunLL2V2kwqKzkvJ&index=23
+
+
+## License
+
+MIT License – see [LICENSE](LICENSE).
