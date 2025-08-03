@@ -1,0 +1,85 @@
+# ---- Build trees (out-of-source recommended) ----
+/build/
+/build-*/
+cmake-build-*/
+
+# ---- CMake noise in source tree (if created accidentally) ----
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+Makefile
+# Keep compile_commands.json (useful for tooling); comment out next line if you want to ignore it
+# compile_commands.json
+CMakeUserPresets.json
+
+# ---- Ninja/Make internals ----
+.ninja_deps
+.ninja_log
+
+# ---- Compiled objects & libs ----
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.exp
+*.pdb
+*.ilk
+*.idb
+*.dsym/
+*.dSYM/
+
+# ---- Testing artifacts ----
+Testing/
+CTestTestfile.cmake
+DartConfiguration.tcl
+
+# ---- Coverage ----
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+lcov.info
+coverage/
+
+# ---- IDE/editor/OS ----
+.vscode/
+.idea/
+.vs/
+*.user
+*.suo
+*.sln
+*.vcxproj*
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# ---- Clang tooling (keep .clang-format if you use it) ----
+.clangd
+# .clang-format
+# .clang-tidy
+
+# ---- Python (for your plotting script / local venv) ----
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ipynb_checkpoints/
+
+# ---- Generated data/images (usually under build/, which is already ignored) ----
+# Uncomment if you sometimes generate outside build/
+# *.csv
+# *.png
+# *.svg
+# *.pdf
+# *.log
