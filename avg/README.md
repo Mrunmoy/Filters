@@ -1,128 +1,155 @@
-# Average (Running Mean) Filter
+# Average Filters (Running Mean & Moving Average)
 
-This module implements a simple **running arithmetic mean** filter with persistent state—equivalent to the MATLAB persistent version [here](https://drive.google.com/drive/folders/1oHuf9X6Iy3tcf6dRBCJVKTFa-KRoBEkB).
+This module implements two common averaging filters with stateful behavior, equivalent to their MATLAB implementations:
 
-## What it does (math)
+1. **Running Arithmetic Mean Filter** (persistent state, incremental mean)  
+2. **Fixed-Window Moving Average Filter** (sliding window of N samples)
 
-Given the k-th sample x_k and the previous running average avg_{k-1}:
+---
 
-```
-alpha_k = (k - 1) / k
-avg_k   = alpha_k * avg_{k-1} + (1 - alpha_k) * x_k
-```
+## 1️⃣ Running Arithmetic Mean Filter
 
-Initial conditions used here:
-- `k` starts at 1
-- `avg_0 = 0` → on the first update, `avg_1 = x_1`
+Mathematically:
 
-## Directory layout
+$$
+\alpha_k = \frac{k-1}{k}, \qquad
+\text{avg}_k = \alpha_k \cdot \text{avg}_{k-1} + (1-\alpha_k) \cdot x_k
+$$
+
+- Initial state:  
+  - `k = 1`  
+  - `avg_0 = 0` → on first update, `avg_1 = x_1`  
+
+---
+
+## 2️⃣ Moving Average Filter (Window N)
+
+For a signal sequence \( x_k \), with window size \( N \):
+
+$$
+\text{avg}_k = \frac{1}{N}\sum_{i=k-N+1}^{k} x_i
+$$
+
+- The first call fills the entire buffer with the first sample (MATLAB behavior).  
+- Internally implemented with a **ring buffer** for efficiency (\(O(1)\) update).
+
+---
+
+## Directory Layout
 
 ```
 avg/
   CMakeLists.txt
   inc/
     RunningAverageFilter.hpp
+    MovingAverageFilter.hpp
   src/
     RunningAverageFilter.cpp
+    MovingAverageFilter.cpp
   test/
     CMakeLists.txt
     RunningAverageFilterTests.cpp
+    MovingAverageFilterTests.cpp
+    CsvData.cpp / CsvData.hpp
     plot.py
+    sonar.csv                # Optional: input data for MovingAvg sim
 ```
 
-## Build & test
+---
 
-From the **repository root** (where the top-level `CMakeLists.txt` lives):
+## Build & Run Tests
+
+From the **repo root**:
 
 ```bash
 ./build.sh
 ```
 
-To run only the avg tests:
+Run only tests for this module:
+
 ```bash
 ctest --test-dir build -R FilterAvgTests --output-on-failure
 ```
 
-### CSV output location
+---
 
-The avg test writes a CSV called `avg_sim.csv` containing `t,xm,avg` columns.
+### Test CSV Outputs
 
-- Typical path (when the test working directory is the test binary dir):
+- **Running Mean Filter:**  
+  Writes `avg_sim.csv` with columns: `t,xm,avg`  
+  Typical location:
   ```
   build/avg/test/avg_sim.csv
   ```
-- If unsure, locate it with:
-  ```bash
-  find build -name avg_sim.csv
+
+- **Moving Average Filter (Simulation):**  
+  - Input CSV defaults to `avg/test/sonar.csv` unless `MOVAVG_SIM_CSV` is set.
+  - Output CSV: `<input_stem>_movavg_out.csv` with columns: `t,y,avg`  
+    e.g.:
+  ```
+  avg/test/sonar_movavg_out.csv
+  ```
+  or
+  ```
+  build/avg/sonar_movavg_out.csv
   ```
 
-> Tip: To fix the working directory for the test, set this in `avg/test/CMakeLists.txt`:
-> ```cmake
-> include(GoogleTest)
-> gtest_discover_tests(FilterAvgTests
->     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-> )
-> ```
-> Then the CSV will always land in `build/avg/test/`.
+---
 
-## Plotting the results
+## Plotting Results
 
-The test’s `plot.py` script plots the CSV and **saves a PNG** next to the CSV by default.
+The shared plot script will visualize both filters.
 
 ### 1) Install Python deps
 
-- For interactive plotting (optional but recommended on Linux):
-  ```bash
-  sudo apt-get install -y python3-tk
-  ```
-- Python packages:
-  ```bash
-  pip install matplotlib numpy
-  ```
-
-### 2) Run the plot script
-
 ```bash
-# Save PNG next to the CSV as <csv_basename>_plot.png
+sudo apt-get install -y python3-tk   # for interactive plot windows
+pip install matplotlib numpy
+```
+
+### 2) Plot
+
+Example for running mean:
+```bash
 python3 avg/test/plot.py build/avg/test/avg_sim.csv
-
-# Or choose a specific output path
-python3 avg/test/plot.py build/avg/test/avg_sim.csv -o build/avg/test/avg_plot.png
 ```
 
-The script prints the absolute path to the generated PNG.
+Example for moving average:
+```bash
+python3 avg/test/plot.py avg/test/sonar_movavg_out.csv -x t -y y avg --title "Moving Average Filter"
+```
 
-## API (C++)
+Plots are saved as PNG next to the CSV and path is printed:
+```
+Saved PNG: /absolute/path/to/sonar_movavg_out_plot.png
+```
 
+---
+
+## API Overview
+
+### RunningAverageFilter
 Header: `avg/inc/RunningAverageFilter.hpp`
-
 ```cpp
-namespace Filters { namespace Avg {
-
-class RunningAverageFilter
-{
-public:
-    RunningAverageFilter();
-
-    // Feed one sample; returns updated average
-    double update(double x);
-
-    // Reset to initial state (avg=0, k=1)
-    void reset();
-
-    // Accessors
-    double getAverage() const;
-    std::uint64_t getCount() const;
-};
-
-}} // namespace Filters::Avg
+double update(double x);
+void reset();
+double getAverage() const;
+std::uint64_t getCount() const;
 ```
 
-- `update(x)` updates and returns the new running average.
-- `reset()` restores the initial conditions.
-- `getAverage()` returns the current running mean.
-- `getCount()` returns how many samples have been incorporated.
+### MovingAverageFilter
+Header: `avg/inc/MovingAverageFilter.hpp`
+```cpp
+explicit MovingAverageFilter(std::size_t windowSize = 100);
+double update(double x);
+void reset();
+void setWindowSize(std::size_t n);
+double getAverage() const;
+std::size_t getWindowSize() const;
+```
+
+---
 
 ## License
 
-MIT. See the repository’s `LICENSE` file.
+MIT. See [LICENSE](../LICENSE).
