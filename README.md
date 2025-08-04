@@ -1,6 +1,8 @@
 # Filters
 
-A collection of small, focused **filters** implemented in modern C++ with unit tests and optional data visualization. The original code was in Matlab (refer to Reference section below) from Dr. Shane Ross. I just converted them to C++ version for my own understanding and playing with them.
+A collection of small, focused **filters** implemented in modern C++ with unit tests and optional data visualization.\
+The original code was in Matlab (see Reference section below) by Dr. Shane Ross.\
+I converted them to C++ for learning and experimentation.
 
 - **Build system:** CMake (GoogleTest is fetched automatically)
 - **Language standard:** C++17 (or newer)
@@ -17,20 +19,35 @@ filters/
     inc/
     src/
     test/
-  median/
+  lpf/
     README.md
     inc/
     src/
     test/
-  ...
+  utils/
+    CsvData.hpp
+    CsvData.cpp
+    scripts/
+      mat_to_csv.py
+      plot.py
+    data/
+      SonarAlt.csv
 ```
 
 ---
 
 ## Build & Test
 
+From the repo root:
+
 ```bash
 ./build.sh
+```
+
+Run all tests:
+
+```bash
+ctest --test-dir build --output-on-failure
 ```
 
 ---
@@ -38,16 +55,37 @@ filters/
 ## Filters
 
 - [Average Filters (Running Mean & Moving Average)](avg/README.md)
+- [Low-Pass Filter (First Order IIR)](lpf/README.md) – a recursive filter where the current output depends on the previous output and current input.
 
-*(More filters will be listed here as they are added.)*
+(More filters will be listed here as they’re added.)
+
+---
+
+## Python Plotting Requirements
+
+Install Python packages for interactive or saved plots:
+
+```bash
+pip install -r utils/scripts/requirements.txt
+```
+
+To enable interactive plots (on Linux):
+
+```bash
+sudo apt-get install -y python3-tk
+```
 
 ---
 
 ## Reference
-https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO_Wrcbk
 
-https://www.youtube.com/watch?v=HCd-leV8OkU&list=PLUeHTafWecAXDFDYEwunLL2V2kwqKzkvJ&index=23
+- Original lectures & Matlab code by Dr. Shane Ross:\
+  [https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO\_Wrcbk](https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO_Wrcbk)
 
+- Lecture video:\
+  [https://www.youtube.com/watch?v=HCd-leV8OkU&list=PLUeHTafWecAXDFDYEwunLL2V2kwqKzkvJ&index=23](https://www.youtube.com/watch?v=HCd-leV8OkU\&list=PLUeHTafWecAXDFDYEwunLL2V2kwqKzkvJ\&index=23)
+
+---
 
 ## License
 

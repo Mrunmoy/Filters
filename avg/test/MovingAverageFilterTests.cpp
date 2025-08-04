@@ -89,13 +89,7 @@ TEST(MovingAverageFilter, WindowChangeResetsToFirstRun)
 
 TEST(MovingAverageFilter, SimulationFromCsv)
 {
-    // 1) Try env var (user override)
-    const char* csvEnv = std::getenv("MOVAVG_SIM_CSV");
-
-    // 2) Fallback to default file in the test *source* folder
-    std::string csvPath = csvEnv
-        ? std::string(csvEnv)
-        : (std::string(MOVAVG_TEST_SOURCE_DIR) + "/SonarAlt.csv");
+    const std::string csvPath = std::string(DATA_DIR) + "/SonarAlt.csv";
 
     // Optional knobs (still allow env overrides)
     const std::size_t win = [&](){

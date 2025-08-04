@@ -24,4 +24,7 @@ if(BUILD_TESTING)
 endif()
 
 # Per-filter directories
+add_subdirectory(utils)
 add_subdirectory(avg)
+add_subdirectory(lpf)
+

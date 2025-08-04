@@ -12,6 +12,7 @@ add_executable(MovingAverageFilterTests
 )
 target_link_libraries(MovingAverageFilterTests PRIVATE
     FilterAvg
+    Utils
     GTest::gtest_main
 )
 
