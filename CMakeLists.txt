@@ -27,4 +27,5 @@ endif()
 add_subdirectory(utils)
 add_subdirectory(avg)
 add_subdirectory(lpf)
+add_subdirectory(kalman)
 
