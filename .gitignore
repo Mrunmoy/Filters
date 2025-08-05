@@ -35,6 +35,7 @@ CMakeUserPresets.json
 *.idb
 *.dsym/
 *.dSYM/
+*.csv
 
 # ---- Testing artifacts ----
 Testing/
