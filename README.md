@@ -24,6 +24,11 @@ filters/
     inc/
     src/
     test/
+  kalman/
+    README.md
+    inc/
+    src/
+    test/
   utils/
     CsvData.hpp
     CsvData.cpp
@@ -32,6 +37,7 @@ filters/
       plot.py
     data/
       SonarAlt.csv
+      Voltage.csv
 ```
 
 ---
@@ -56,8 +62,7 @@ ctest --test-dir build --output-on-failure
 
 - [Average Filters (Running Mean & Moving Average)](avg/README.md)
 - [Low-Pass Filter (First Order IIR)](lpf/README.md) – a recursive filter where the current output depends on the previous output and current input.
-
-(More filters will be listed here as they’re added.)
+- [Simple Kalman Filter (1D Estimation)](kalman/README.md) – estimates the true value from noisy measurements using recursive Bayesian update.
 
 ---
 
@@ -80,10 +85,10 @@ sudo apt-get install -y python3-tk
 ## Reference
 
 - Original lectures & Matlab code by Dr. Shane Ross:\
-  [https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO\_Wrcbk](https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO_Wrcbk)
+  [Google Drive](https://drive.google.com/drive/folders/1oG4mPxUaJMPU0STWOipA1pOLXO_Wrcbk)
 
 - Lecture video:\
-  [https://www.youtube.com/watch?v=HCd-leV8OkU&list=PLUeHTafWecAXDFDYEwunLL2V2kwqKzkvJ&index=23](https://www.youtube.com/watch?v=HCd-leV8OkU\&list=PLUeHTafWecAXDFDYEwunLL2V2kwqKzkvJ\&index=23)
+  [YouTube](https://www.youtube.com/watch?v=HCd-leV8OkU)
 
 ---
 
